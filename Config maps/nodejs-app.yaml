@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-deployment
+  labels:
+    app: nodejs-demo
+spec:
+  replicas: 1                    
+  selector:
+    matchLabels:
+      app: nodejs-demo
+  template:
+    metadata:
+      labels:
+        app: nodejs-demo
+    spec:
+      containers:
+      - name: nodejs-demo
+        image: thunderstorm710/nodejs-demo
+        ports:
+        - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:   
+  name: nodejs-service
+spec: 
+  selector: 
+    app: nodejs-demo
+  ports: 
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+--- 
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata: 
+  labels: 
+    name: nodejs-demo
+    namespace: default
+spec: 
+  endpoints: 
+  - interval: 30s
+    port: web
+  selector: 
+    matchLabels: 
+      app: nodejs-demo
+
+---
+nodejs-demo:
+  uri: "nodejs-demo://nodejs-service:5000"
+
+serviceMonitor:
+  enabled: true
+  additionalLabels:
+    release: prometheus
