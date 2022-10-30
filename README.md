@@ -27,9 +27,9 @@
 
 
 ## 7. Criar outro ficheiro configmap para fazer o override de algumas configurações do mongodb exporter e guardar como values.yaml
-	
+#### (Usar o ficheiro values.yaml e mongodb.yaml do repositório e copiar o conteúdo)	
 	nano 
-	#### (Usar o ficheiro values.yaml do repositório e copiar o conteúdo)	
+		
 
 ## 8. Instalar o mongodb exporter juntamente com o values.yaml
 
