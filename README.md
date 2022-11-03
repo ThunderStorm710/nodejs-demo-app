@@ -1,45 +1,45 @@
 # Create and monitor a mongodb app with Kubernetes, Prometheus and Grafana
-## 1. Criar cluster minikube
+## 1. Create minikube cluster
 
 	minikube start
 
-## 2. Adicionar todos os repositórios
+## 2. Add all the neccessary repositories
 
 	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 	helm repo add stable https://charts.helm.sh/stable
 
-## 3. Procurar atualizações dos repositórios
+## 3. Update all the added repositorioes 
 
 	helm repo update
 
-## 4. Instalar o chart promtheus no minikube - 28.08.2022
+## 4. Install prometheus chart inside minikube cluster - 28.08.2022
 
 	helm install prometheus prometheus-community/kube-prometheus-stack
 
-## 5. Criar um configmap mongodb e guardar como mongodb.yaml
+## 5. Create a mongodb configmap and save it as mongodb.yaml
 
 	nano
-## (Usar o ficheiro mongodb.yaml do repositório e copiar o conteúdo)	
+## (You can use the mongodb.yaml file from this repository and copy its content)	
 
-## 6. Aplicar o configmap ao minikube
+## 6. Apply the configmap created into minikube cluster
 	
 	kubectl apply -f mongodb.yaml
 
 
-## 7. Criar outro ficheiro configmap para fazer o override de algumas configurações do mongodb exporter e guardar como values.yaml
-#### (Usar o ficheiro values.yaml e mongodb.yaml do repositório e copiar o conteúdo)	
+## 7. Create another configmap in order to override some of the mongodb exporter configurations and save it as values.yaml
+#### (You can use the values.yaml file from this repository and copy its content)	
 	nano 
 		
 
-## 8. Instalar o mongodb exporter juntamente com o values.yaml
+## 8. Install mongodb exporter and override its values with values.yaml
 
 	helm install mongodb-exporter prometheus-community/prometheus-mongodb-exporter -f values.yaml
 
-## 9. Verificar e analisar os dados/metrics usando o prometheus ou a grafana
+## 9. Verify and analise all the data/metrics using prometheus/grafana
 
 	kubectl port-forward service/prometheus-kube-prometheus-prometheus 9090
 	kubectl port-forward deployment/prometheus-grafana 3000
 	kubectl port-forward service/mongodb-exporter-prometheus-mongodb-exporter 9216  
 
-## Para apagar e limpar tudo
+## In case you want to delete minikube cluster
 	minikube delete
